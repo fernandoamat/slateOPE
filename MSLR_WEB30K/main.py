@@ -7,11 +7,14 @@ import Metrics
 
 # input arguments
 parser = ArgumentParser(description='Simulation with real data MSLR_WEB30K for different slate OPE estimators')
-parser.add_argument("-s", "--samplesize", default=5000, type=int, help="sample size", required=False)
-parser.add_argument("-m", "--maxactions", default=10, type=int, help="keep a subset of maximum M allowed docs", required=False)
+parser.add_argument("-n", "--samplesize", default=5000, type=int, help="sample size", required=False)
+parser.add_argument("-m", "--maxactions", default=10, type=int, help="keep a subset of maximum M allowed docs",
+                    required=False)
 parser.add_argument("-k", "--numslots", default=5, type=int, help="sample size", required=False)
 parser.add_argument("-r", "--metric", default="NDCG", type=str,
                     help="Metric. Valid options are: NDCG, ERR, SumRelevance, MaxRelevance, DCG", required=False)
+parser.add_argument("-s", "--numsimulations", default=1000, type=int,
+                    help="number of runs to estimate MSE for a given (N,K,D) tuple", required=False)
 
 args = parser.parse_args()
 
@@ -19,6 +22,7 @@ SAMPLE_SIZE = args.samplesize
 M = args.maxactions
 L = args.numslots
 METRIC = args.metric
+iterations = args.numsimulations
 
 resetSeed = 387
 
@@ -64,7 +68,6 @@ target = numpy.mean(trueMetric)
 print("Parallel:main [LOG] *** TARGET: ", target, flush=True)
 del trueMetric
 
-iterations = 1000
 SE = numpy.zeros((iterations, 4))
 for iteration in range(iterations):
 

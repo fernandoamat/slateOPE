@@ -4,6 +4,8 @@ This repo accompanies and reproduces results from the paper "Control Variates fo
 ## Section 6: Experiments on real data
 In order to reproduce the data points in Section 6 Figures 1 and 2 of the paper go to `MSLR_WEB30K` folder and run the `main.py` script.
 
+For example, `python main.py -m 20 -k 5 -r NDCG -n 5000 -s 1000` runs a simulation for all estimators for K=5 slots with top-M=20 predicted documents and NDCG metric. Each simulation is run S=1000 times with N=5000 samples each.  
+
 
 ## Section 7: Experiments on synthetic data
 In order to reproduce any of the data points in Section 7 Figure 3 of the paper, go to `simulator` folder and run the `main.py` script.
