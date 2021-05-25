@@ -21,7 +21,7 @@ def runEstimatorFixedTensor(rTensor, estimatorId, mu):
 # input arguments
 parser = ArgumentParser(description='Simulation with synthetic data for different slate OPE estimators')
 parser.add_argument("-r", "--reward", default="Mway", type=str, help="reward type", required=False)
-parser.add_argument("-m", "--mway", default=2, type=int, help="reward type", required=False)
+parser.add_argument("-m", "--mway", default=1, type=int, help="reward type", required=False)
 parser.add_argument("-k", "--numslots", default=3, type=int, help="number of slots", required=False)
 parser.add_argument("-d", "--numactions", default=10, type=int, help="number of actions per slot", required=False)
 parser.add_argument("-n", "--samplesize", default=600, type=int, help="sample size", required=False)
