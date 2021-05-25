@@ -297,12 +297,12 @@ class L2RPolicy(Policy):
                 
 class DeterministicPolicy(Policy):
     #model_type: (str) Model class to use for scoring documents
-    def __init__(self, dataset, model_type, allow_repetitions=False, regress_gains=False, weighted_ls=False, hyper_params=None):   # Nikos
+    def __init__(self, dataset, model_type, allow_repetitions=False, regress_gains=False, weighted_ls=False, hyper_params=None):
         #Policy.__init__(self, dataset, False)
-        Policy.__init__(self, dataset, allow_repetitions)   # Nikos
+        Policy.__init__(self, dataset, allow_repetitions)
         self.modelType=model_type
         #self.hyperParams={'alpha': (numpy.logspace(-3,2,num=6,base=10)).tolist()}
-        self.hyperParams={'alpha': (numpy.logspace(-3,2,num=3,base=10)).tolist()}    # Nikos
+        self.hyperParams={'alpha': (numpy.logspace(-3,2,num=3,base=10)).tolist()}
         if hyper_params is not None:
             self.hyperParams=hyper_params
         
@@ -310,7 +310,7 @@ class DeterministicPolicy(Policy):
         self.weighted=weighted_ls
         
         #self.treeDepths={'max_depth': list(range(3,21,3))}
-        self.treeDepths={'max_depth': [3]}   # Nikos
+        self.treeDepths={'max_depth': [3]}
         
         #Must call train(...) to set all these members
         #before using DeterministicPolicy objects elsewhere
@@ -403,7 +403,7 @@ class DeterministicPolicy(Policy):
                                 param_grid=self.treeDepths,
                                 #scoring=None, fit_params=fitParams, n_jobs=-2,
                                 scoring=None, n_jobs=-2,
-                                cv=3, refit=True, verbose=0, pre_dispatch="1*n_jobs",   # Nikos
+                                cv=3, refit=True, verbose=0, pre_dispatch="1*n_jobs",
                                 #iid=True, cv=5, refit=True, verbose=0, pre_dispatch="1*n_jobs",
                                 error_score='raise', return_train_score=False)
                             
@@ -416,14 +416,14 @@ class DeterministicPolicy(Policy):
             elif self.modelType=='lasso':
                 lassoCV=sklearn.model_selection.GridSearchCV(sklearn.linear_model.Lasso(fit_intercept=False,
                                                         normalize=False, precompute=False, copy_X=False, 
-                                                        max_iter=500, tol=1e-4, warm_start=False, positive=False, # Nikos
+                                                        max_iter=500, tol=1e-4, warm_start=False, positive=False,
                                                         #max_iter=3000, tol=1e-4, warm_start=False, positive=False,
                                                         random_state=None, selection='random'),
                                 param_grid=self.hyperParams,
                                 #scoring=None, fit_params=fitParams, n_jobs=-2,
                                 scoring=None, n_jobs=-2,
                                 #iid=True, cv=5, refit=True, verbose=0, pre_dispatch="1*n_jobs",
-                                cv=3, refit=True, verbose=0, pre_dispatch="1*n_jobs",   # Nikos
+                                cv=3, refit=True, verbose=0, pre_dispatch="1*n_jobs",
                                 error_score='raise', return_train_score=False)
                                 
                 lassoCV.fit(allFeatures, allTargets)
@@ -492,7 +492,7 @@ class DeterministicPolicy(Policy):
         tieBreaker=numpy.random.random(allDocScores.size)
         sortedDocScores=numpy.lexsort((tieBreaker,-allDocScores))[0:validDocs]
 
-        #if self.allowRepetitions:           #Nikos
+        #if self.allowRepetitions:
         if False:
             if (ranking_size > allowedDocs): 
                 pad = [sortedDocScores[-1]] * (ranking_size - validDocs)
@@ -551,7 +551,7 @@ class UniformPolicy(Policy):
         Policy.__init__(self, dataset, allow_repetitions)
         self.name='Unif-'
         #if allow_repetitions:
-        if self.allowRepetitions:    # Nikos
+        if self.allowRepetitions:
             self.name+='Rep'
         else:
             self.name+='NoRep'
@@ -595,12 +595,12 @@ class UniformPolicy(Policy):
         
         validDocs=ranking_size
         #if ranking_size < 0 or ((not self.allowRepetitions) and (validDocs > allowedDocs)):
-        if ranking_size < 0 or validDocs > allowedDocs:   # Nikos
+        if ranking_size < 0 or validDocs > allowedDocs:
             validDocs=allowedDocs
             
         producedRanking=None
         #if self.allowRepetitions:
-        if True:   # Nikos
+        if True:
             producedRanking=numpy.random.choice(allowedDocs, size=validDocs,
                                 replace=True)
         else:

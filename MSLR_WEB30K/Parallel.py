@@ -76,7 +76,7 @@ if __name__ == "__main__":
     if args.max_docs >= 1:
         numpy.random.seed(args.numpy_seed)
         #detLogger=Policy.DeterministicPolicy(data, 'tree', args.replacement)
-        detLogger=Policy.DeterministicPolicy(data, 'tree', False)  # Nikos
+        detLogger=Policy.DeterministicPolicy(data, 'tree', False)
         detLogger.train(anchorURLFeatures, 'url')
     
         detLogger.filterDataset(args.max_docs)
@@ -86,15 +86,15 @@ if __name__ == "__main__":
     #Setup target policy
     numpy.random.seed(args.numpy_seed)
     # targetPolicy=Policy.DeterministicPolicy(data, args.evaluation_ranker, args.replacement)
-    targetPolicy=Policy.DeterministicPolicy(data, args.evaluation_ranker, False)   # Nikos
+    targetPolicy=Policy.DeterministicPolicy(data, args.evaluation_ranker, False)
     targetPolicy.train(bodyTitleDocFeatures, 'body')
     targetPolicy.predictAll(args.length_ranking)
     
     loggingPolicy=None
     #if args.temperature <= 0.0:
-    if True:   # Nikos
+    if True:
         #loggingPolicy=Policy.UniformPolicy(data, args.replacement)
-        loggingPolicy=Policy.UniformPolicy(data, True)   # Nikos
+        loggingPolicy=Policy.UniformPolicy(data, True)
         
     else:
         underlyingPolicy=Policy.DeterministicPolicy(data, args.logging_ranker, args.replacement)
