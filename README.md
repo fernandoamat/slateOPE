@@ -2,6 +2,8 @@
 This repo accompanies and reproduces results from the paper "Control Variates for Slate Off-Policy Evaluation".
 
 ## Section 6: Experiments on real data
+TO DO
+
 
 ## Section 7: Experiments on synthetic data
 In order to reproduce any of the data points in Section 3 Figure 3 of the paper, go to `simulator` folder and run the `main.py` script.
