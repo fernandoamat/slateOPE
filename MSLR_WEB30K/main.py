@@ -71,7 +71,7 @@ print("Parallel:main [LOG] *** TARGET: ", target, flush=True)
 del trueMetric
 
 SE = numpy.zeros((iterations, 4))
-final_sample_size = numpy.zeros(iterations)
+final_sample_size = numpy.zeros((iterations, 4))
 for iteration in range(iterations):
 
     numpy.random.seed(resetSeed + 7 * iteration)
@@ -118,12 +118,10 @@ for iteration in range(iterations):
     PICV = PI - sum(weights * sumY1) / sampleSize
 
     SE[iteration] = [(PI - target) ** 2, (SNPI - target) ** 2, (PIsingleCV - target) ** 2, (PICV - target) ** 2]
-
+    final_sample_size[iteration] = sampleSize
     print(".", end="", flush=True)
 
-    final_sample_size[iteration] = sampleSize
-
-
+final_sample_size = numpy.mean(final_sample_size, axis=0)
 print("\n final sample size:")
 print(final_sample_size)
 
@@ -136,7 +134,7 @@ print("\n log10(sqrt(mean(SE))):")
 print(log10rmses)
 
 results = dict()
-for i in stds.shape[0]:
+for i in range(stds.shape[0]):
     results[str(final_sample_size[i])] = (log10rmses[i], stds[i])
 print(results)
 
