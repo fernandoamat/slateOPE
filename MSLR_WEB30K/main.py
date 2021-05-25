@@ -1,5 +1,6 @@
 import numpy
 from argparse import ArgumentParser
+import pathlib
 import Datasets
 import Settings
 import Policy
@@ -31,7 +32,8 @@ print("sample size = %s" % SAMPLE_SIZE)
 # load dataset
 
 trainDataset = Datasets.Datasets()
-trainDataset.loadTxt(Settings.DATA_DIR + 'mslr/mslr.txt', 'MSLR')
+DATA_DIR = str(pathlib.Path(__file__).parent.absolute())
+trainDataset.loadTxt(DATA_DIR + '/Datasets/mslr/mslr.txt', 'MSLR')
 
 anchorURLFeatures, bodyTitleDocFeatures = Settings.get_feature_sets("MSLR")
 
