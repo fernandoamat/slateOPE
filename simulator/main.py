@@ -24,7 +24,7 @@ parser.add_argument("-r", "--reward", default="Mway", type=str, help="reward typ
 parser.add_argument("-m", "--mway", default=2, type=int, help="reward type", required=False)
 parser.add_argument("-k", "--numslots", default=3, type=int, help="number of slots", required=False)
 parser.add_argument("-d", "--numactions", default=10, type=int, help="number of actions per slot", required=False)
-parser.add_argument("-n", "--samplesize", default=600, type=str, help="sample size", required=False)
+parser.add_argument("-n", "--samplesize", default=600, type=int, help="sample size", required=False)
 parser.add_argument("-s", "--numsimulations", default=1000, type=int,
                     help="number of runs to estimate MSE for a given (N,K,D) tuple", required=False)
 

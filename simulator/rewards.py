@@ -5,6 +5,7 @@ import itertools
 File containing implementation of different reward functions
 """
 
+
 def getMwaySlateReward(numCandidatesArray, M):
     K = len(numCandidatesArray)
     indices = [_ for _ in itertools.combinations(range(K), M)]
@@ -13,11 +14,11 @@ def getMwaySlateReward(numCandidatesArray, M):
     pairReward = []
     for idx in indices:
         rew = np.random.normal(loc=0.5 / K, scale=0.1 / K, size=[numCandidatesArray[_] for _ in idx])  # Gauss draws
-        #         # modified reward model
-        #         if M==1 and idx[0]==0:
-        #             rew *= np.asarray([0.5**k for k in range(len(rew))])
-        #         else:
-        #             rew *= 0.01
+        # modified reward model
+        if M == 1 and idx[0] == 0:
+            rew *= np.asarray([0.5 ** k for k in range(len(rew))])
+        else:
+            rew *= 0.01
         pairReward.append(rew)
 
     reward = np.zeros(numCandidatesArray, dtype=np.float64)
