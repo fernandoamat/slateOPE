@@ -71,6 +71,7 @@ print("Parallel:main [LOG] *** TARGET: ", target, flush=True)
 del trueMetric
 
 SE = numpy.zeros((iterations, 4))
+final_sample_size = numpy.zeros(iterations)
 for iteration in range(iterations):
 
     numpy.random.seed(resetSeed + 7 * iteration)
@@ -120,21 +121,23 @@ for iteration in range(iterations):
 
     print(".", end="", flush=True)
 
-final_sample_size = sampleSize
-print("final sample size = %s" % sampleSize)
+    final_sample_size[iteration] = sampleSize
+
+
+print("\n final sample size:")
+print(final_sample_size)
 
 stds = numpy.std(SE, axis=0)
-print("std(SE):")
+print("\n std(SE):")
 print(stds)
 
 log10rmses = numpy.log10(numpy.sqrt(numpy.mean(SE, axis=0)))
-print("log10(sqrt(mean(SE))):")
+print("\n log10(sqrt(mean(SE))):")
 print(log10rmses)
 
 results = dict()
-for i in inputs:
-    if not i.node_failed:
-        results[str(i.final_sample_size)] = (i.log10rmses, i.stds)
+for i in stds.shape[0]:
+    results[str(final_sample_size[i])] = (log10rmses[i], stds[i])
 print(results)
 
 print("M=%s, L=%s, METRIC=%s" % (M, L, METRIC))
