@@ -10,7 +10,7 @@ For example, `python main.py -m 20 -k 5 -r NDCG -n 5000 -s 1000` runs a simulati
 In order to run these experiments you need to download the [Microsoft Learning to Rank Datasets](https://www.microsoft.com/en-us/research/project/mslr/) and follow these steps:
 1. Download the dataset [here](https://1drv.ms/u/s!AtsMfWUz5l8nbXGPBlwD1rnFdBY). It is a ~3.7GB Zip file
 2. You will need to sign in with a One Drive account to download the file.
-3. Inside the file there are five folders named `Fold%d`. Extract the three files in `Fold1`
+3. Inside the file there are five folders named `Fold%d`. Just use files in subfolder `Fold1`. Extract the three `txt` files in subfolder `Fold1`
 4. Combine the three txt files extracted with the following Unix command `cat test.txt train.txt vali.txt > mslr.txt`
 5. Copy the file `mslr.txt` (~4.1GB) to the relative folder `./slateOPE/MSLR_WEB30K/Datasets/mslr/mslr.txt`
 
