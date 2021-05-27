@@ -59,19 +59,27 @@ elif METRIC == 'MaxRelevance':
     metric = Metrics.MaxRelevance(data, L)
 
 numQueries = len(data.docsPerQuery)
-trueMetric = []
+
+# find all queries that have exactly M valid docs
+# and precompute the corresponding target policy rankings
+J = []
+Rankings = []
 for i in range(numQueries):
     if data.docsPerQuery[i] == M:
-        trueMetric.append(metric.computeMetric(i, targetPolicy.predict(i, L)))
-        if i % 100 == 0:
-            print(".", end="", flush=True)
+        J.append(i)
+        Rankings.append(targetPolicy.predict(i,L))
+
+trueMetric=[]
+for i in J:
+    trueMetric.append(metric.computeMetric(i, targetPolicy.predict(i, L)))
+    if i%100==0:
+        print(".", end="", flush=True)
 print("", flush=True)
-target = numpy.mean(trueMetric)
-print("Parallel:main [LOG] *** TARGET: ", target, flush=True)
+target=numpy.mean(trueMetric)
+print("Parallel:main [LOG] *** TARGET: ", target, flush = True)
 del trueMetric
 
 SE = numpy.zeros((iterations, 4))
-final_sample_size = numpy.zeros((iterations, 4))
 for iteration in range(iterations):
 
     numpy.random.seed(resetSeed + 7 * iteration)
@@ -83,30 +91,30 @@ for iteration in range(iterations):
     sumGR = 0.0
     sumGRY1 = numpy.zeros(L)
     sumGRG1 = 0.0
-
+    
     sampleSize = 0
-    for j in range(SAMPLE_SIZE):
-        currentQuery = numpy.random.randint(0, numQueries)
+    while sampleSize < self.SAMPLE_SIZE:
 
-        if data.docsPerQuery[currentQuery] == M:
-            sampleSize += 1
+        sampleSize += 1
+        random_index = int(numpy.random.randint(0, len(J)))
 
-            loggedRanking = loggingPolicy.predict(currentQuery, L)
-            loggedValue = metric.computeMetric(currentQuery, loggedRanking)
+        currentQuery = J[random_index]
+        newRanking   = Rankings[random_index]
 
-            newRanking = targetPolicy.predict(currentQuery, L)
+        loggedRanking=loggingPolicy.predict(currentQuery, L)
+        loggedValue=metric.computeMetric(currentQuery, loggedRanking)
 
-            Y = M * ((newRanking == loggedRanking) * 1.0)
-            sumY1 += (Y - 1)
-            sumY1sq += (Y - 1) ** 2
+        Y = M * ((newRanking == loggedRanking) * 1.0)
+        sumY1 += (Y - 1)
+        sumY1sq += (Y - 1) ** 2
 
-            G = (Y - 1).sum() + 1
-            sumG += G
+        G = (Y - 1).sum() + 1
+        sumG += G
 
-            GR = G * loggedValue
-            sumGR += GR
-            sumGRY1 += GR * (Y - 1)
-            sumGRG1 += GR * (G - 1)
+        GR = G * loggedValue
+        sumGR += GR
+        sumGRY1 += GR * (Y - 1)
+        sumGRG1 += GR * (G - 1)
 
     PI = sumGR / sampleSize
     SNPI = sumGR / sumG
@@ -118,24 +126,13 @@ for iteration in range(iterations):
     PICV = PI - sum(weights * sumY1) / sampleSize
 
     SE[iteration] = [(PI - target) ** 2, (SNPI - target) ** 2, (PIsingleCV - target) ** 2, (PICV - target) ** 2]
-    final_sample_size[iteration] = sampleSize
     print(".", end="", flush=True)
 
-final_sample_size = numpy.mean(final_sample_size, axis=0)
-print("\n final sample size:")
-print(final_sample_size)
-
 stds = numpy.std(SE, axis=0)
-print("\n std(SE):")
-print(stds)
 
 log10rmses = numpy.log10(numpy.sqrt(numpy.mean(SE, axis=0)))
 print("\n log10(sqrt(mean(SE))):")
 print(log10rmses)
 
-results = dict()
-for i in range(stds.shape[0]):
-    results[str(final_sample_size[i])] = (log10rmses[i], stds[i])
-print(results)
-
-print("M=%s, L=%s, METRIC=%s" % (M, L, METRIC))
+# To get confidence intervals (2 standard errors) for the log(RMSE), for plotting, we use the delta method: 
+# CI = 2*stds / (2*numpy.mean(SE)*numpy.sqrt(iterations)) / numpy.log(10)
