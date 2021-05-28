@@ -74,6 +74,6 @@ for estimatorId in all_estimators:
     sse = np.mean(all_sse)
 
     logrmse = np.log10(mse) / 2
-    sse = sse / (2 * mse * np.sqrt(numRunsSimulation))
+    sse = sse / (2 * mse * np.sqrt(numRunsSimulation)) / np.log(10)
 
     print(estimatorId, round(logrmse, 3), round(sse, 3))
