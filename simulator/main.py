@@ -39,7 +39,7 @@ numRunsSimulation = args.numsimulations
 
 # setup intermediate variables
 numCandidatesArray = [D] * K  # D: number of actions per slot in array format
-mu = [np.asarray([1 / 10] * D)] * K
+mu = [np.asarray([1 / D] * D)] * K
 targetPolicy = tuple([0] * len(numCandidatesArray))  # target policy is (wlog) fixed to (0,0,...)
 
 print('Drawing random tensors...')
