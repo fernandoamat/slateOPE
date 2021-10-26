@@ -170,7 +170,7 @@ class MyNDCG(Metric):
     #allow_repetitions: (bool) If True, max gain is computed as if repetitions are allowed in the ranking
     def __init__(self, dataset, ranking_size, allow_repetitions):
         Metric.__init__(self, dataset, ranking_size)
-        self.discountParams=0.5**numpy.arange(self.rankingSize)
+        self.discountParams=0.5**numpy.arange(self.rankingSize) # Line modified from original code
         self.name='MyNDCG'
         print("MyNDCG:init [INFO] RankingSize", ranking_size, flush=True)
         
@@ -206,7 +206,7 @@ class MyNDCG(Metric):
         if normalizer<=0.0:
             return 0.0
         else:
-            relevanceList=-numpy.sort(-self.dataset.relevances[query_id][ranking])
+            relevanceList=-numpy.sort(-self.dataset.relevances[query_id][ranking]) # Line modified from original code
             # relevanceList=self.dataset.relevances[query_id][ranking]
             gain=numpy.exp2(relevanceList)-1.0
             dcg=numpy.dot(self.discountParams[0:numpy.shape(gain)[0]], gain)
